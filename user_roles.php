@@ -5,8 +5,6 @@ include 'templates/header.php';
     header("Location: index.php");
  ?>
 
-  <!-- Left nav
-        ================================================== -->
         <div class="row">
            <div class="span3 bs-docs-sidebar">
                 <ul class="nav nav-list bs-docs-sidenav">

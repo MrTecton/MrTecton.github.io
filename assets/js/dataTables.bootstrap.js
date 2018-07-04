@@ -1,4 +1,3 @@
-/* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
 	"sDom": "<<'col-xs-6'l><'col-xs-6'f>r>t<<'col-xs-6'i><'col-xs-6'p>>",
 	"sPaginationType": "bootstrap",
@@ -13,23 +12,13 @@ $.extend( true, $.fn.dataTable.defaults, {
 	}
 } );
 
-
-
-
-/* Default class modification */
 $.extend( $.fn.dataTableExt.oStdClasses, {
 	"sWrapper": "dataTables_wrapper form-inline",
 	"sFilterInput": "form-control input-sm",
 	"sLengthSelect": "form-control input-sm"
 } );
 
-
-/*
- * TableTools Bootstrap compatibility
- * Required TableTools 2.1+
- */
 if ( $.fn.DataTable.TableTools ) {
-	// Set the classes that TableTools uses to something suitable for Bootstrap
 	$.extend( true, $.fn.DataTable.TableTools.classes, {
 		"container": "DTTT btn-group",
 		"buttons": {
@@ -51,7 +40,6 @@ if ( $.fn.DataTable.TableTools ) {
 		}
 	} );
 
-	// Have the collection use a bootstrap compatible dropdown
 	$.extend( true, $.fn.DataTable.TableTools.DEFAULTS.oTags, {
 		"collection": {
 			"container": "ul",

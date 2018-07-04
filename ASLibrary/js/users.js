@@ -1,7 +1,3 @@
-
-/** USERS NAMESPACE
- ======================================== */
-
 var users = {};
 
 users.addEditData = {
@@ -28,16 +24,12 @@ users.displayInfo = function (userId) {
         detailsBody = $("#details-body"),
         modal       = $("#modal-user-details");
 
-   //display modal
    modal.modal('show');
 
-   // set username (title of modal window) to loading...
    username.text($_lang.loading);
    
-   //display ajax loading gif
    ajaxLoading.show();
    
-   //hide details body
    detailsBody.hide();
    
    $.ajax({
@@ -48,10 +40,8 @@ users.displayInfo = function (userId) {
            userId: userId
        },
        success: function (result) {
-           //parse result as JSON
            var res = JSON.parse(result);
            
-           //update modal fields
            username .text(res.username);
            email    .text(res.email);
            firstName.text(res.first_name);
@@ -60,10 +50,8 @@ users.displayInfo = function (userId) {
            phone    .text(res.phone);
            last_login.text(res.last_login);
 
-           //hide ajax loading
            ajaxLoading.hide();
            
-           //display user info
            detailsBody.show();
        }
    });

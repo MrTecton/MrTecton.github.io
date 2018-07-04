@@ -1,18 +1,8 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html
-*/
- 
-/**
- * Debugging and Logging manager
- */
 class Hybrid_Logger
 {
 	function __construct()
 	{
-		// if debug mode is set to true, then check for the writable log file
 		if ( Hybrid_Auth::$config["debug_mode"] ){
 			if ( ! file_exists( Hybrid_Auth::$config["debug_file"] ) ){
 				throw new Exception( "'debug_mode' is set to 'true', but the file " . Hybrid_Auth::$config['debug_file'] . " in 'debug_file' does not exit.", 1 );

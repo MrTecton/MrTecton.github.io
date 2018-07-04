@@ -1,23 +1,10 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html 
-*/
-
-/**
-* Hybrid_Providers_Twitter provider adapter based on OAuth1 protocol
-*/
 class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
 {
-	/**
-	* IDp wrappers initializer 
-	*/
 	function initialize()
 	{
 		parent::initialize();
 
-		// Provider api end-points 
 		$this->api->api_base_url      = "https://api.twitter.com/1.1/";
 		$this->api->authorize_url     = "https://api.twitter.com/oauth/authenticate";
 		$this->api->request_token_url = "https://api.twitter.com/oauth/request_token";
@@ -34,17 +21,12 @@ class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
 		$this->api->curl_auth_header  = false;
 	}
 
- 	/**
- 	 * begin login step
- 	 */
  	function loginBegin()
  	{
  		$tokens = $this->api->requestToken( $this->endpoint );
  	
- 		// request tokens as recived from provider
  		$this->request_tokens_raw = $tokens;
  	
- 		// check the last HTTP status code returned
  		if ( $this->api->http_code != 200 ){
  			throw new Exception( "Authentification failed! {$this->providerId} returned an error. " . $this->errorMessageByStatus( $this->api->http_code ), 5 );
  		}
@@ -56,23 +38,17 @@ class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
  		$this->token( "request_token"       , $tokens["oauth_token"] );
  		$this->token( "request_token_secret", $tokens["oauth_token_secret"] );
  	
-		// redirect the user to the provider authentication url with force_login
  		if ( isset( $this->config['force_login'] ) && $this->config['force_login'] ){
  			Hybrid_Auth::redirect( $this->api->authorizeUrl( $tokens, array( 'force_login' => true ) ) );
  		}
 
-		// else, redirect the user to the provider authentication url
  		Hybrid_Auth::redirect( $this->api->authorizeUrl( $tokens ) );
  	}
 
-	/**
-	* load the user profile from the IDp api client
-	*/
 	function getUserProfile()
 	{
 		$response = $this->api->get( 'account/verify_credentials.json' );
 
-		// check the last HTTP status code returned
 		if ( $this->api->http_code != 200 ){
 			throw new Exception( "User profile request failed! {$this->providerId} returned an error. " . $this->errorMessageByStatus( $this->api->http_code ), 6 );
 		}
@@ -81,7 +57,6 @@ class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
 			throw new Exception( "User profile request failed! {$this->providerId} api returned an invalid response.", 6 );
 		}
 
-		# store the user profile.  
 		$this->user->profile->identifier  = (property_exists($response,'id'))?$response->id:"";
 		$this->user->profile->displayName = (property_exists($response,'screen_name'))?$response->screen_name:"";
 		$this->user->profile->description = (property_exists($response,'description'))?$response->description:"";
@@ -94,15 +69,11 @@ class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
 		return $this->user->profile;
  	}
 
-	/**
-	* load the user contacts
-	*/
 	function getUserContacts()
 	{
 		$parameters = array( 'cursor' => '-1' ); 
 		$response  = $this->api->get( 'friends/ids.json', $parameters ); 
 
-		// check the last HTTP status code returned
 		if ( $this->api->http_code != 200 ){
 			throw new Exception( "User contacts request failed! {$this->providerId} returned an error. " . $this->errorMessageByStatus( $this->api->http_code ) );
 		}
@@ -111,7 +82,6 @@ class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
 			return ARRAY();
 		}
 
-		// 75 id per time should be okey
 		$contactsids = array_chunk ( $response->ids, 75 );
 
 		$contacts    = ARRAY(); 
@@ -120,7 +90,6 @@ class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
 			$parameters = array( 'user_id' => implode( ",", $chunk ) ); 
 			$response   = $this->api->get( 'users/lookup.json', $parameters ); 
 
-			// check the last HTTP status code returned
 			if ( $this->api->http_code != 200 ){
 				throw new Exception( "User contacts request failed! {$this->providerId} returned an error. " . $this->errorMessageByStatus( $this->api->http_code ) );
 			}
@@ -143,27 +112,16 @@ class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
 		return $contacts;
  	}
 
-	/**
-	* update user status
-	*/ 
 	function setUserStatus( $status )
 	{
 		$parameters = array( 'status' => $status ); 
 		$response  = $this->api->post( 'statuses/update.json', $parameters ); 
 
-		// check the last HTTP status code returned
 		if ( $this->api->http_code != 200 ){
 			throw new Exception( "Update user status failed! {$this->providerId} returned an error. " . $this->errorMessageByStatus( $this->api->http_code ) );
 		}
  	}
 
-	/**
-	* load the user latest activity  
-	*    - timeline : all the stream
-	*    - me       : the user activity only  
-	*
-	* by default return the timeline
-	*/ 
 	function getUserActivity( $stream )
 	{
 		if( $stream == "me" ){
@@ -173,7 +131,6 @@ class Hybrid_Providers_Twitter extends Hybrid_Provider_Model_OAuth1
 			$response  = $this->api->get( 'statuses/home_timeline.json' ); 
 		}
 
-		// check the last HTTP status code returned
 		if ( $this->api->http_code != 200 ){
 			throw new Exception( "User activity stream request failed! {$this->providerId} returned an error. " . $this->errorMessageByStatus( $this->api->http_code ) );
 		}

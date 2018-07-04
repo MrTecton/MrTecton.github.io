@@ -7,8 +7,6 @@ include 'templates/header.php';
 
 <link rel="stylesheet" href="assets/css/dataTables.bootstrap.css"/>
     
-        <!-- Left nav
-        ================================================== -->
         <div class="row">
            <div class="span3 bs-docs-sidebar">
                 <ul class="nav nav-list bs-docs-sidenav">
@@ -50,7 +48,7 @@ include 'templates/header.php';
                   <i class="icon-user icon-white glyphicon glyphicon-user"></i>
                   <?php echo ASLang::get('add_user'); ?>
               </a>
-              <?php //user_role 3 => admin ?>
+              <?php user_role 3 => admin ?>
               <?php $users = $db->select("SELECT * FROM `as_users` WHERE `user_role` != '3' ORDER BY `register_date` DESC"); ?>
               <table cellpadding="0" cellspacing="0" border="0" class="table table-striped users-table" id="users-list" width="100%">
                   <thead>
@@ -178,9 +176,9 @@ include 'templates/header.php';
                     <?php echo ASLang::get('ok'); ?>
                   </a>
                 </div>
-              </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-          </div><!-- /.modal -->
+              </div>
+            </div>
+          </div>
 
            <div class="modal <?php echo BOOTSTRAP_VERSION == 2 ? "hide" : "fade" ?>" id="modal-change-role">
             <div class="modal-dialog">
@@ -212,9 +210,9 @@ include 'templates/header.php';
                       <?php echo ASLang::get('ok'); ?>
                   </a>
                 </div>
-              </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-          </div><!-- /.modal -->
+              </div>
+            </div>
+          </div>
 
 
 
@@ -309,9 +307,9 @@ include 'templates/header.php';
                       <?php echo ASLang::get('add'); ?>
                     </a>
                 </div>
-              </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-          </div><!-- /.modal -->
+              </div>
+            </div>
+          </div>
 
         
         

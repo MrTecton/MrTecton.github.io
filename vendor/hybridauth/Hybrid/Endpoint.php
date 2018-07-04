@@ -1,33 +1,13 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html
-*/
-
-/**
- * Hybrid_Endpoint class
- * 
- * Hybrid_Endpoint class provides a simple way to handle the OpenID and OAuth endpoint.
- */
 class Hybrid_Endpoint {
 	public static $request = NULL;
 	public static $initDone = FALSE;
 
-	/**
-	* Process the current request
-	*
-	* $request - The current request parameters. Leave as NULL to default to use $_REQUEST.
-	*/
 	public static function process( $request = NULL )
 	{
-		// Setup request variable
 		Hybrid_Endpoint::$request = $request;
 
 		if ( is_null(Hybrid_Endpoint::$request) ){
-			// Fix a strange behavior when some provider call back ha endpoint
-			// with /index.php?hauth.done={provider}?{args}... 
-			// >here we need to recreate the $_REQUEST
 			if ( strrpos( $_SERVER["QUERY_STRING"], '?' ) ) {
 				$_SERVER["QUERY_STRING"] = str_replace( "?", "&", $_SERVER["QUERY_STRING"] );
 
@@ -37,33 +17,25 @@ class Hybrid_Endpoint {
 			Hybrid_Endpoint::$request = $_REQUEST;
 		}
 
-		// If openid_policy requested, we return our policy document
 		if ( isset( Hybrid_Endpoint::$request["get"] ) && Hybrid_Endpoint::$request["get"] == "openid_policy" ) {
 			Hybrid_Endpoint::processOpenidPolicy();
 		}
 
-		// If openid_xrds requested, we return our XRDS document
 		if ( isset( Hybrid_Endpoint::$request["get"] ) && Hybrid_Endpoint::$request["get"] == "openid_xrds" ) {
 			Hybrid_Endpoint::processOpenidXRDS();
 		}
 
-		// If we get a hauth.start
 		if ( isset( Hybrid_Endpoint::$request["hauth_start"] ) && Hybrid_Endpoint::$request["hauth_start"] ) {
 			Hybrid_Endpoint::processAuthStart();
 		}
-		// Else if hauth.done
 		elseif ( isset( Hybrid_Endpoint::$request["hauth_done"] ) && Hybrid_Endpoint::$request["hauth_done"] ) {
 			Hybrid_Endpoint::processAuthDone();
 		}
-		// Else we advertise our XRDS document, something supposed to be done from the Realm URL page
 		else {
 			Hybrid_Endpoint::processOpenidRealm();
 		}
 	}
 
-	/**
-	* Process OpenID policy request
-	*/
 	public static function processOpenidPolicy()
 	{
 		$output = file_get_contents( dirname(__FILE__) . "/resources/openid_policy.html" ); 
@@ -71,9 +43,6 @@ class Hybrid_Endpoint {
 		die();
 	}
 
-	/**
-	* Process OpenID XRDS request
-	*/
 	public static function processOpenidXRDS()
 	{
 		header("Content-Type: application/xrds+xml");
@@ -91,9 +60,6 @@ class Hybrid_Endpoint {
 		die();
 	}
 
-	/**
-	* Process OpenID realm request
-	*/
 	public static function processOpenidRealm()
 	{
 		$output = str_replace
@@ -106,16 +72,12 @@ class Hybrid_Endpoint {
 		die();
 	}
 
-	/**
-	* define:endpoint step 3.
-	*/
 	public static function processAuthStart()
 	{
 		Hybrid_Endpoint::authInit();
 
 		$provider_id = trim( strip_tags( Hybrid_Endpoint::$request["hauth_start"] ) );
 
-		# check if page accessed directly
 		if( ! Hybrid_Auth::storage()->get( "hauth_session.$provider_id.hauth_endpoint" ) ) {
 			Hybrid_Logger::error( "Endpoint: hauth_endpoint parameter is not defined on hauth_start, halt login process!" );
 
@@ -123,10 +85,8 @@ class Hybrid_Endpoint {
 			die( "You cannot access this page directly." );
 		}
 
-		# define:hybrid.endpoint.php step 2.
 		$hauth = Hybrid_Auth::setup( $provider_id );
 
-		# if REQUESTed hauth_idprovider is wrong, session not created, etc. 
 		if( ! $hauth ) {
 			Hybrid_Logger::error( "Endpoint: Invalid parameter on hauth_start!" );
 
@@ -149,9 +109,6 @@ class Hybrid_Endpoint {
 		die();
 	}
 
-	/**
-	* define:endpoint step 3.1 and 3.2
-	*/
 	public static function processAuthDone()
 	{
 		Hybrid_Endpoint::authInit();
@@ -192,13 +149,11 @@ class Hybrid_Endpoint {
 		if ( ! Hybrid_Endpoint::$initDone) {
 			Hybrid_Endpoint::$initDone = TRUE;
 
-			# Init Hybrid_Auth
 			try {
 				require_once realpath( dirname( __FILE__ ) )  . "/Storage.php";
 				
 				$storage = new Hybrid_Storage(); 
 
-				// Check if Hybrid_Auth session already exist
 				if ( ! $storage->config( "CONFIG" ) ) { 
 					header( "HTTP/1.0 404 Not Found" );
 					die( "You cannot access this page directly." );

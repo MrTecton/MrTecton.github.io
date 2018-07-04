@@ -1,18 +1,13 @@
  $(document).ready(function () {
- 	//catch form submit
  	$(".form-horizontal").submit(function () {
     	return false;
     });
  	
-
-    //button login click
     $("#btn-login").click(function () {
         var  un    = $("#login-username"),
              pa    = $("#login-password");
 
-       //validate login form
-       if(login.validateLogin(un, pa) === true) { 
-           //validation passed, prepare data that will be sent to server
+       if(login.validateLogin(un, pa) === true) {
             var data = {
                 username: un.val(),
                 password: pa.val(),
@@ -21,28 +16,20 @@
                     password: "login-password"
                 }
             };
-            
-            //send login data to server
             login.loginUser(data);
        }
 
     });
 
-
-    //set focus on username field when page is loaded
     $("#login-username").focus();
 });
 
-
-/** LOGIN NAMESPACE
- ======================================== */
 var login = {};
 
 login.loginUser = function (data) {
     var btn = $("#btn-login");
     asengine.loadingButton(btn, $_lang.logging_in);
 
-    //encrypt password before sending it through the network
     data.password = CryptoJS.SHA512(data.password).toString();
 
     $.ajax({
@@ -70,7 +57,6 @@ login.loginUser = function (data) {
 login.validateLogin = function (un, pass) {
     var valid = true;
 
-    //remove previous error messages
     asengine.removeErrorMessages();
 
     if($.trim(un.val()) == "") {

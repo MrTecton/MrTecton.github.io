@@ -41,7 +41,6 @@ if(!isset($_GET['k']))
                                                 <legend class=""><?php echo ASLang::get('password_reset'); ?></legend>
                                             </div>
                                             <div class="control-group form-group">
-                                                <!-- Username -->
                                                 <label class="control-label col-lg-4"  for="login-username">
                                                     <?php echo ASLang::get('new_password'); ?>
                                                 </label>
@@ -51,7 +50,6 @@ if(!isset($_GET['k']))
                                             </div>
 
                                             <div class="control-group form-group">
-                                                <!-- Button -->
                                                 <div class="controls col-lg-offset-4 col-lg-8">
                                                     <button id="btn-reset-pass" class="btn btn-success">
                                                         <?php echo ASLang::get('reset_password'); ?>

@@ -1,12 +1,4 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html 
-*/
-
-// A service client for the OAuth 2 flow.
-// v0.1
 class OAuth2Client
 {
 	public $api_base_url     = "";
@@ -23,8 +15,6 @@ class OAuth2Client
 	public $access_token_expires_in = "" ;
 	public $access_token_expires_at = "" ;
 
-	//--
-
 	public $sign_token_name          = "access_token";
 	public $decode_json              = true;
 	public $curl_time_out            = 30;
@@ -35,12 +25,8 @@ class OAuth2Client
 	public $curl_authenticate_method = "POST";
         public $curl_proxy               = null;
 
-	//--
-
 	public $http_code             = "";
 	public $http_info             = "";
-
-	//--
 
 	public function __construct( $client_id = false, $client_secret = false, $redirect_uri='' )
 	{
@@ -86,7 +72,6 @@ class OAuth2Client
 		if( isset( $response->refresh_token ) ) $this->refresh_token           = $response->refresh_token; 
 		if( isset( $response->expires_in    ) ) $this->access_token_expires_in = $response->expires_in; 
 		
-		// calculate when the access token expire
 		if( isset($response->expires_in)) {
 			$this->access_token_expires_at = time() + $response->expires_in;
 		}
@@ -98,19 +83,15 @@ class OAuth2Client
 	{
 		if ( $this->access_token ){
 			if ( $this->token_info_url && $this->refresh_token ){
-				// check if this access token has expired, 
 				$tokeninfo = $this->tokenInfo( $this->access_token ); 
 
-				// if yes, access_token has expired, then ask for a new one
 				if( $tokeninfo && isset( $tokeninfo->error ) ){
 					$response = $this->refreshToken( $this->refresh_token ); 
 
-					// if wrong response
 					if( ! isset( $response->access_token ) || ! $response->access_token ){
 						throw new Exception( "The Authorization Service has return an invalid response while requesting a new access token. given up!" ); 
 					}
 
-					// set new access_token
 					$this->access_token = $response->access_token; 
 				}
 			}
@@ -121,9 +102,6 @@ class OAuth2Client
 		return false;
 	}
 
-	/** 
-	* Format and sign an oauth for provider api 
-	*/
 	public function api( $url, $method = "GET", $parameters = array() ) 
 	{
 		if ( strrpos($url, 'http://') !== 0 && strrpos($url, 'https://') !== 0 ) {
@@ -145,23 +123,15 @@ class OAuth2Client
 		return $response; 
 	}
 
-	/** 
-	* GET wrappwer for provider apis request
-	*/
 	function get( $url, $parameters = array() )
 	{
 		return $this->api( $url, 'GET', $parameters ); 
 	} 
 
-	/** 
-	* POST wreapper for provider apis request
-	*/
 	function post( $url, $parameters = array() )
 	{
 		return $this->api( $url, 'POST', $parameters ); 
 	}
-
-	// -- tokens
 
 	public function tokenInfo($accesstoken)
 	{
@@ -185,8 +155,6 @@ class OAuth2Client
 		$response = $this->request( $this->token_url, $params, "POST" );
 		return $this->parseRequestResult( $response );
 	}
-
-	// -- utilities
 
 	private function request( $url, $params=false, $type="GET" )
 	{
