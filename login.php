@@ -68,7 +68,6 @@ $register->botProtection();
                         <legend class=""><?php echo ASLang::get('login'); ?></legend>
                       </div>    
                       <div class="control-group form-group">
-                        <!-- Username -->
                         <label class="control-label col-lg-4"  for="login-username"><?php echo ASLang::get('username'); ?></label>
                         <div class="controls col-lg-8">
                           <input type="text" id="login-username" name="username" placeholder="" class="input-xlarge form-control"> <br />
@@ -76,7 +75,6 @@ $register->botProtection();
                       </div>
 
                       <div class="control-group form-group">
-                        <!-- Password-->
                         <label class="control-label col-lg-4" for="login-password"><?php echo ASLang::get('password'); ?></label>
                         <div class="controls col-lg-8">
                           <input type="password" id="login-password" name="password" placeholder="" class="input-xlarge form-control">
@@ -85,7 +83,6 @@ $register->botProtection();
  
  
                       <div class="control-group form-group">
-                        <!-- Button -->
                         <div class="controls col-lg-offset-4 col-lg-8">
                           <button id="btn-login" class="btn btn-success"><?php echo ASLang::get('login'); ?></button>
                         </div>
@@ -155,7 +152,6 @@ $register->botProtection();
                             <legend class=""><?php echo ASLang::get('forgot_password'); ?></legend>
                           </div>    
                           <div class="control-group form-group">
-                            <!-- Username -->
                             <label class="control-label col-lg-4"  for="forgot-password-email"><?php echo ASLang::get('your_email'); ?></label>
                             <div class="controls col-lg-8">
                               <input type="email" id="forgot-password-email" class="input-xlarge form-control">
@@ -163,7 +159,6 @@ $register->botProtection();
                           </div>
 
                           <div class="control-group form-group">
-                            <!-- Button -->
                             <div class="controls col-lg-offset-4 col-lg-8">
                               <button id="btn-forgot-password" class="btn btn-success"><?php echo ASLang::get('reset_password'); ?></button>
                             </div>

@@ -1,7 +1,6 @@
 <?php
 include_once 'AS.php';
 
-//csrf protection
 if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') 
     die("Sorry bro!");
 

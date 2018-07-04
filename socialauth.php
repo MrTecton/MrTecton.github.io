@@ -40,24 +40,19 @@ try {
 
     $userProfile = $adapter->getUserProfile();
 
-    // determine if this is first time that user logs in via this social network
     if ( $register->registeredViaSocial($provider, $userProfile->identifier) )
     {
-        // user already exist and his account is connected with this provider, log him in
         $user = $register->getBySocial($provider, $userProfile->identifier);
         $login->byId($user['user_id']);
         header('Location: index.php');
     }
     else
     {
-        // user is not registred via this social network, check if his email exist in db
-        // and associate his account with this provider
 
         $validator = new ASValidator();
 
         if ( $validator->emailExist($userProfile->email) )
         {
-            // hey, this user is registered here, just associate social account with his email
             $user = $register->getByEmail($userProfile->email);
             $register->addSocialAccount($user['user_id'], $provider, $userProfile->identifier);
             $login->byId($user['user_id']);
@@ -65,12 +60,8 @@ try {
         }
         else
         {
-            // this is first time that user is registring on this webiste, create his account
             $user = new ASUser(null);
 
-            // generate unique username
-            // for example, if two users with same display name (that is usually first and last name)
-            // are registred, they will have the same username, so we have to add some random number here
             $username = str_replace(' ', '', $userProfile->displayName);
 
             $tmpUsername = $username;
@@ -80,10 +71,6 @@ try {
 
             while ( $validator->usernameExist($tmpUsername) ) {
 
-                //try maximum 50 times
-                // Note: Chances for going over 2-3 times are really really low but just in case,
-                // if somehow it always generate username that is already in use, prevent database from crashing
-                // and generate some random unique username (it can be changed by administrator later)
                 if ( $i > $max )
                     break;
 
@@ -91,7 +78,6 @@ try {
                 $i++;
             }
 
-            // there are more than 50 trials, generate random username
             if ( $i > $max )
                 $tmpUsername = uniqid('user', true);
 
@@ -128,8 +114,6 @@ try {
     }
 }
 catch( Exception $e ) {
-    // something happened (social auth cannot be completed), just redirect user to login page
-    // Note: to debug check hybridauth documentation for error codes
     header('Location: login.php');
 }
 

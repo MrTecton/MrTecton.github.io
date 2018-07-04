@@ -1,22 +1,6 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html
-*/
-
-/**
- * Hybrid_Providers_LinkedIn provider adapter based on OAuth1 protocol
- * 
- * Hybrid_Providers_LinkedIn use linkedinPHP library created by fiftyMission Inc.
- * 
- * http://hybridauth.sourceforge.net/userguide/IDProvider_info_LinkedIn.html
- */
 class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model
 { 
-	/**
-	* IDp wrappers initializer
-	*/
 	function initialize()
 	{
 		if ( ! $this->config["keys"]["key"] || ! $this->config["keys"]["secret"] ){
@@ -33,19 +17,14 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model
 		}
 	}
 
-	/**
-	* begin login step
-	*/
 	function loginBegin()
 	{
-		// send a request for a LinkedIn access token
 		$response = $this->api->retrieveTokenRequest();
 
 		if( isset( $response['success'] ) && $response['success'] === TRUE ){
 			$this->token( "oauth_token",        $response['linkedin']['oauth_token'] );
 			$this->token( "oauth_token_secret", $response['linkedin']['oauth_token_secret'] );
 
-			# redirect user to LinkedIn authorisation web page
 			Hybrid_Auth::redirect( LINKEDIN::_URL_AUTH . $response['linkedin']['oauth_token'] );
 		}
 		else{
@@ -53,9 +32,6 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model
 		}
 	}
 
-	/**
-	* finish login step
-	*/
 	function loginFinish()
 	{
 		$oauth_token    = $_REQUEST['oauth_token'];
@@ -75,7 +51,6 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model
 			$this->token( "access_token"         , $response['linkedin']['oauth_token'] );
 			$this->token( "access_token_secret"  , $response['linkedin']['oauth_token_secret'] );
 
-			// set user as logged in
 			$this->setUserConnected();
 		}
 		else{
@@ -83,13 +58,9 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model
 		}
 	}
 
-	/**
-	* load the user profile from the IDp api client
-	*/
 	function getUserProfile()
 	{
 		try{
-			// http://developer.linkedin.com/docs/DOC-1061
 			$response = $this->api->profile('~:(id,first-name,last-name,public-profile-url,picture-url,email-address,date-of-birth,phone-numbers,summary)');
 		}
 		catch( LinkedInException $e ){
@@ -135,9 +106,6 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model
 		}
 	}
 
-	/**
-	* load the user contacts
-	*/
 	function getUserContacts()
 	{
 		try{
@@ -170,20 +138,17 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model
 		return $contacts;
 	}
 
-	/**
-	* update user status
-	*/
 	function setUserStatus( $status )
 	{
 		$parameters = array();
-		$private    = true; // share with your connections only
+		$private    = true;
 
 		if( is_array( $status ) ){
-			if( isset( $status[0] ) && ! empty( $status[0] ) ) $parameters["title"]               = $status[0]; // post title
-			if( isset( $status[1] ) && ! empty( $status[1] ) ) $parameters["comment"]             = $status[1]; // post comment
-			if( isset( $status[2] ) && ! empty( $status[2] ) ) $parameters["submitted-url"]       = $status[2]; // post url
-			if( isset( $status[3] ) && ! empty( $status[3] ) ) $parameters["submitted-image-url"] = $status[3]; // post picture url
-			if( isset( $status[4] ) && ! empty( $status[4] ) ) $private                           = $status[4]; // true or false
+			if( isset( $status[0] ) && ! empty( $status[0] ) ) $parameters["title"]               = $status[0];
+			if( isset( $status[1] ) && ! empty( $status[1] ) ) $parameters["comment"]             = $status[1];
+			if( isset( $status[2] ) && ! empty( $status[2] ) ) $parameters["submitted-url"]       = $status[2];
+			if( isset( $status[3] ) && ! empty( $status[3] ) ) $parameters["submitted-image-url"] = $status[3];
+			if( isset( $status[4] ) && ! empty( $status[4] ) ) $private                           = $status[4];
 		}
 		else{
 			$parameters["comment"] = $status;
@@ -202,11 +167,6 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model
 		}
 	}
 
-	/**
-	* load the user latest activity
-	*    - timeline : all the stream
-	*    - me       : the user activity only
-	*/
 	function getUserActivity( $stream )
 	{
 		try{

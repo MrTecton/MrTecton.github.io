@@ -1,50 +1,21 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html 
-*/
-
-/**
- * To implement an OpenID based service provider, Hybrid_Provider_Model_OpenID
- * can be used to save the hassle of the authentication flow. 
- * 
- * Each class that inherit from Hybrid_Provider_Model_OAuth2 have only to define
- * the provider identifier : <code>public $openidIdentifier = ""; </code>
- *
- * Hybrid_Provider_Model_OpenID use LightOpenID lib which can be found on
- * Hybrid/thirdparty/OpenID/LightOpenID.php
- */
 class Hybrid_Provider_Model_OpenID extends Hybrid_Provider_Model
 {
-	/* Openid provider identifier */
 	public $openidIdentifier = ""; 
 
-	// --------------------------------------------------------------------
-
-	/**
-	* adapter initializer 
-	*/
 	function initialize()
 	{
 		if( isset( $this->params["openid_identifier"] ) ){
 			$this->openidIdentifier = $this->params["openid_identifier"];
 		}
 
-		// include LightOpenID lib
 		require_once Hybrid_Auth::$config["path_libraries"] . "OpenID/LightOpenID.php"; 
 		
-		// An error was occurring when proxy wasn't set. Not sure where proxy was meant to be set/initialized.
 		Hybrid_Auth::$config['proxy'] = isset(Hybrid_Auth::$config['proxy'])?Hybrid_Auth::$config['proxy']:'';
 		
 		$this->api = new LightOpenID( parse_url( Hybrid_Auth::$config["base_url"], PHP_URL_HOST), Hybrid_Auth::$config["proxy"] ); 
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	* begin login step 
-	*/
 	function loginBegin()
 	{
 		if( empty( $this->openidIdentifier ) ){
@@ -76,31 +47,21 @@ class Hybrid_Provider_Model_OpenID extends Hybrid_Provider_Model
 			'media/image/default'    ,
 		);
 
-		# redirect the user to the provider authentication url
 		Hybrid_Auth::redirect( $this->api->authUrl() );
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	* finish login step 
-	*/
 	function loginFinish()
 	{
-		# if user don't garant acess of their data to your site, halt with an Exception
 		if( $this->api->mode == 'cancel'){
 			throw new Exception( "Authentication failed! User has canceled authentication!", 5 );
 		}
 
-		# if something goes wrong
 		if( ! $this->api->validate() ){
 			throw new Exception( "Authentication failed. Invalid request recived!", 5 );
 		}
 
-		# fetch recived user data
 		$response = $this->api->getAttributes();
 
-		# sotre the user profile
 		$this->user->profile->identifier  = $this->api->identity;
 
 		$this->user->profile->firstName   = (array_key_exists("namePerson/first",$response))?$response["namePerson/first"]:"";
@@ -145,24 +106,15 @@ class Hybrid_Provider_Model_OpenID extends Hybrid_Provider_Model
 			$this->user->profile->gender = "male";
 		} 
 
-		// set user as logged in
 		$this->setUserConnected();
 
-		// with openid providers we get the user profile only once, so store it 
 		Hybrid_Auth::storage()->set( "hauth_session.{$this->providerId}.user", $this->user );
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	* load the user profile from the IDp api client
-	*/
 	function getUserProfile()
 	{
-		// try to get the user profile from stored data
 		$this->user = Hybrid_Auth::storage()->get( "hauth_session.{$this->providerId}.user" ) ;
 
-		// if not found
 		if ( ! is_object( $this->user ) ){
 			throw new Exception( "User profile request failed! User is not connected to {$this->providerId} or his session has expired.", 6 );
 		} 

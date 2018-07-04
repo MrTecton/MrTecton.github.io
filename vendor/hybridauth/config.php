@@ -1,19 +1,9 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html
-*/
-
-// ----------------------------------------------------------------------------------------
-//	HybridAuth Config file: http://hybridauth.sourceforge.net/userguide/Configuration.html
-// ----------------------------------------------------------------------------------------
 return
 	array(
 		"base_url" => SOCIAL_CALLBACK_URI,
 
 		"providers" => array ( 
-			// openid providers
 			"OpenID" => array (
 				"enabled" => false
 			),
@@ -42,7 +32,6 @@ return
 				"keys"    => array ( "key" => TWITTER_KEY, "secret" => TWITTER_SECRET ) 
 			),
 
-			// windows live
 			"Live" => array ( 
 				"enabled" => false,
 				"keys"    => array ( "id" => "", "secret" => "" ) 
@@ -64,7 +53,6 @@ return
 			),
 		),
 
-		// if you want to enable logging, set 'debug_mode' to true  then provide a writable file by the web server on "debug_file"
 		"debug_mode" => false,
 
 		"debug_file" => "",

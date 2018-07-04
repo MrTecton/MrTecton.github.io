@@ -1,34 +1,16 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html 
-*/
-
-/**
- * Hybrid_Providers_MySpace provider adapter based on OAuth1 protocol
- * 
- * http://hybridauth.sourceforge.net/userguide/IDProvider_info_MySpace.html
- */
 class Hybrid_Providers_MySpace extends Hybrid_Provider_Model_OAuth1
 {
-	/**
-	* IDp wrappers initializer 
-	*/
 	function initialize() 
 	{
 		parent::initialize();
 
-		// Provider api end-points
 		$this->api->api_endpoint_url  = "http://api.myspace.com/v1/";
 		$this->api->authorize_url     = "http://api.myspace.com/authorize";
 		$this->api->request_token_url = "http://api.myspace.com/request_token";
 		$this->api->access_token_url  = "http://api.myspace.com/access_token";
 	}
 
-	/**
-	* get the connected uid from myspace api
-	*/
 	public function getCurrentUserId()
 	{
 		$response = $this->api->get( 'http://api.myspace.com/v1/user.json' );
@@ -40,9 +22,6 @@ class Hybrid_Providers_MySpace extends Hybrid_Provider_Model_OAuth1
 		return $response->userId;
 	}
 
-	/**
-	* load the user profile from the IDp api client
-	*/
 	function getUserProfile()
 	{
 		$userId = $this->getCurrentUserId();
@@ -68,9 +47,6 @@ class Hybrid_Providers_MySpace extends Hybrid_Provider_Model_OAuth1
 		return $this->user->profile;
 	}
 
-	/**
-	* load the user contacts
-	*/
 	function getUserContacts()
 	{
 		$userId = $this->getCurrentUserId();
@@ -98,30 +74,20 @@ class Hybrid_Providers_MySpace extends Hybrid_Provider_Model_OAuth1
 		return $contacts;
  	}
 
-	/**
-	* update user status
-	*/
 	function setUserStatus( $status )
 	{
-	// crappy myspace... gonna see this asaic
 		$userId = $this->getCurrentUserId();
 		
 		$parameters = array( 'status' => $status );
 
 		$response = $this->api->api( "http://api.myspace.com/v1/users/" . $userId . "/status", 'PUT', $parameters ); 
 
-		// check the last HTTP status code returned
 		if ( $this->api->http_code != 200 )
 		{
 			throw new Exception( "Update user status failed! {$this->providerId} returned an error. " . $this->errorMessageByStatus( $this->api->http_code ) );
 		}
  	}
 
-	/**
-	* load the user latest activity  
-	*    - timeline : all the stream
-	*    - me       : the user activity only  
-	*/
 	function getUserActivity( $stream )
 	{
 		$userId = $this->getCurrentUserId();
@@ -140,14 +106,14 @@ class Hybrid_Providers_MySpace extends Hybrid_Provider_Model_OAuth1
 		$activities = ARRAY();
 
 		if( $stream == "me" ){
-			// todo
+			
 		}                                                          
 		else{                                                      
 			foreach( $response->FriendsStatus as $item ){
 				$ua = new Hybrid_User_Activity();
 
 				$ua->id                 = $item->statusId;
-				$ua->date               = NULL; // to find out!!
+				$ua->date               = NULL;
 				$ua->text               = $item->status;
 
 				$ua->user->identifier   = $item->user->userId;

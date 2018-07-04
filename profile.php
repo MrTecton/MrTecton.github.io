@@ -4,8 +4,6 @@ include 'templates/header.php';
 $userDetails = $user->getDetails();
 ?>
 
-            <!-- Left nav
-            ================================================== -->
             <div class="row">
                <div class="span3 bs-docs-sidebar">
                 <ul class="nav nav-list bs-docs-sidenav">
@@ -42,7 +40,6 @@ $userDetails = $user->getDetails();
                 </ul>
               </div>
               <div class="span9 profile-details-wrapper">
-                    <!-- main content here -->
 
                     <?php if ( ! $user->isAdmin() ): ?>
                         <div class="alert alert-warning" style="margin-top: 30px;">
@@ -54,10 +51,8 @@ $userDetails = $user->getDetails();
                     <form class="form-horizontal no-submit" id="form-changepassword">
                         <fieldset>
                         
-                        <!-- Form Name -->
                         <legend><?php echo ASLang::get('change_password'); ?></legend>
                         
-                        <!-- Password input-->
                         <div class="control-group form-group">
                           <label class="control-label col-lg-4" for="old_password">
                             <?php echo ASLang::get('old_password'); ?>
@@ -68,7 +63,6 @@ $userDetails = $user->getDetails();
                           </div>
                         </div>
                         
-                        <!-- Password input--> 
                         <div class="control-group form-group">
                           <label class="control-label col-lg-4" for="new_password">
                             <?php echo ASLang::get('new_password'); ?>
@@ -79,7 +73,6 @@ $userDetails = $user->getDetails();
                           </div>
                         </div>
                         
-                        <!-- Password input-->
                         <div class="control-group form-group">
                           <label class="control-label col-lg-4" for="new_password_confirm">
                             <?php echo ASLang::get('confirm_new_password'); ?>
@@ -90,7 +83,6 @@ $userDetails = $user->getDetails();
                           </div>
                         </div>
                         
-                        <!-- Button -->
                         <div class="control-group form-group">
                           <label class="control-label col-lg-4" for="change_password"></label>
                           <div class="controls col-lg-8">
@@ -107,10 +99,8 @@ $userDetails = $user->getDetails();
                     <form class="form-horizontal no-submit" id="form-details">
                         <fieldset>
                         
-                        <!-- Form Name -->
                         <legend><?php echo ASLang::get('your_details'); ?></legend>
                         
-                        <!-- Text input-->
                         <div class="control-group form-group">
                           <label class="control-label col-lg-4" for="first_name">
                             <?php echo ASLang::get('first_name'); ?>
@@ -121,7 +111,6 @@ $userDetails = $user->getDetails();
                           </div>
                         </div>
                         
-                        <!-- Text input-->
                         <div class="control-group form-group">
                           <label class="control-label col-lg-4" for="last_name">
                             <?php echo ASLang::get('last_name'); ?>
@@ -132,7 +121,6 @@ $userDetails = $user->getDetails();
                           </div>
                         </div>
                         
-                       <!-- Text input-->
                         <div class="control-group form-group">
                           <label class="control-label col-lg-4" for="address">
                             <?php echo ASLang::get('address'); ?>
@@ -143,7 +131,6 @@ $userDetails = $user->getDetails();
                           </div>
                         </div>
                         
-                        <!-- Text input-->
                         <div class="control-group form-group">
                           <label class="control-label col-lg-4" for="phone">
                             <?php echo ASLang::get('phone'); ?>
@@ -154,7 +141,6 @@ $userDetails = $user->getDetails();
                           </div>
                         </div>
                         
-                        <!-- Button -->
                         <div class="control-group form-group">
                           <label class="control-label col-lg-4" for="update_details"></label>
                           <div class="controls col-lg-8">

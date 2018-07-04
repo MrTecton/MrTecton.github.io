@@ -1,29 +1,10 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html 
-*/
-
-/** 
- * Yahoo OAuth Class
- * 
- * @package             HybridAuth providers package 
- * @author              Lukasz Koprowski <azram19@gmail.com>
- * @version             0.2
- * @license             BSD License
- */ 
-
-/**
- * Hybrid_Providers_Yahoo - Yahoo provider adapter based on OAuth1 protocol
- */
 class Hybrid_Providers_Yahoo extends Hybrid_Provider_Model_OAuth1
 {
 	function initialize() 
 	{
 		parent::initialize();
 
-		// Provider api end-points
 		$this->api->api_base_url      = 'http://social.yahooapis.com/v1/';
 		$this->api->authorize_url     = 'https://api.login.yahoo.com/oauth/v2/request_auth';
 		$this->api->request_token_url = 'https://api.login.yahoo.com/oauth/v2/get_request_token';
@@ -83,9 +64,6 @@ class Hybrid_Providers_Yahoo extends Hybrid_Provider_Model_OAuth1
 		return $this->user->profile;
 	}
 
-	/**
-	 * load the user contacts
-	 */
 	function getUserContacts()
 	{
 		$userId = $this->getCurrentUserId();
@@ -122,9 +100,6 @@ class Hybrid_Providers_Yahoo extends Hybrid_Provider_Model_OAuth1
 		return $contacts;
 	}
 
-	/**
-	* return the user activity stream  
-	*/
 	function getUserActivity( $stream ) 
 	{
 		$userId = $this->getCurrentUserId();
@@ -172,8 +147,6 @@ class Hybrid_Providers_Yahoo extends Hybrid_Provider_Model_OAuth1
 
 		return $activities;
 	}
-
-	//--
 
 	function select($vs, $t)
 	{

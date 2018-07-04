@@ -1,36 +1,17 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html 
-*/
-
-/**
- * Hybrid_Providers_Google provider adapter based on OAuth2 protocol
- * 
- * http://hybridauth.sourceforge.net/userguide/IDProvider_info_Google.html
- */
 class Hybrid_Providers_Google extends Hybrid_Provider_Model_OAuth2
 {
-	// default permissions 
 	public $scope = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.google.com/m8/feeds/";
 
-	/**
-	* IDp wrappers initializer 
-	*/
 	function initialize() 
 	{
 		parent::initialize();
 
-		// Provider api end-points
 		$this->api->authorize_url  = "https://accounts.google.com/o/oauth2/auth";
 		$this->api->token_url      = "https://accounts.google.com/o/oauth2/token";
 		$this->api->token_info_url = "https://www.googleapis.com/oauth2/v1/tokeninfo";
 	}
 
-	/**
-	* begin login step 
-	*/
 	function loginBegin()
 	{
 		$parameters = array("scope" => $this->scope, "access_type" => "offline");
@@ -45,15 +26,10 @@ class Hybrid_Providers_Google extends Hybrid_Provider_Model_OAuth2
 		Hybrid_Auth::redirect( $this->api->authorizeUrl( $parameters ) ); 
 	}
 
-	/**
-	* load the user profile from the IDp api client
-	*/
 	function getUserProfile()
 	{
-		// refresh tokens if needed 
 		$this->refreshToken();
 
-		// ask google api for user infos
 		$response = $this->api->api( "https://www.googleapis.com/oauth2/v1/userinfo" ); 
 
 		if ( ! isset( $response->id ) || isset( $response->error ) ){
@@ -82,13 +58,8 @@ class Hybrid_Providers_Google extends Hybrid_Provider_Model_OAuth2
 		return $this->user->profile;
 	}
 
-	/**
-	* load the user (Gmail) contacts 
-	*  ..toComplete
-	*/
 	function getUserContacts()
 	{ 
-		// refresh tokens if needed 
 		$this->refreshToken();  
 
 		if( ! isset( $this->config['contacts_param'] ) ){

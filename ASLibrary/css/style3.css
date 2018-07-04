@@ -1,13 +1,7 @@
-
-/* All Pages
-==============================*/
-
 html,
 body {
     height: 100%;
 }
-
-
 
 h3 code {
   font-size: 14px;
@@ -54,7 +48,6 @@ form {
     font-weight: bold;
 }
 
-
 .alert { 
     margin-bottom: 0px; 
 }
@@ -78,10 +71,6 @@ form {
 .flags-wrapper a, .header-flags-wrapper a { text-decoration: none; }
 
 .flags-wrapper img, .header-flags-wrapper img { width: 21px; }
-
-/* Login Page
-================================*/
-
 
 #form-details .form-group, 
 #form-changepassword .form-group {
@@ -135,10 +124,6 @@ form {
     cursor: pointer;
 }
 
-
-/* Index Page
-======================================*/
-
 .navbar-brand {
     max-width: 260px;
 }
@@ -165,9 +150,6 @@ form {
     width: 100%; 
     height: 100px; 
 }
-
-/* Users page
-=======================================*/
 
 .users-wrapper {
     padding-top: 33px;
@@ -256,7 +238,6 @@ margin-left: 10px;
     text-align: center;
 }
 
-
 #ajax-loading, .ajax-loading {
     padding: 20px;
     display: none;
@@ -265,20 +246,20 @@ margin-left: 10px;
 section {
   padding-top: 30px;
 }
+
 section > .page-header,
 section > .lead {
   color: #5a5a5a;
 }
+
 section > ul li {
   margin-bottom: 5px;
 }
 
-/* Separators (hr) */
 .bs-docs-separator {
   margin: 40px 0 39px;
 }
 
-/* Faded out hr */
 hr.soften {
   height: 1px;
   margin: 70px 0;
@@ -288,9 +269,6 @@ hr.soften {
   background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0));
   border: 0;
 }
-
-/* Footer
--------------------------------------------------- */
 
 .footer {
   text-align: center;
@@ -303,24 +281,20 @@ hr.soften {
 	margin: 15px 0 0 0;
 }
 
-/* Icons
-====================================== */
 .the-icons {
   margin-left: 0;
   list-style: none;
 }
+
 .the-icons li {
   float: left;
   width: 25%;
   line-height: 25px;
 }
+
 .the-icons i:hover {
   background-color: rgba(255,0,0,.25);
 }
-
-
-/* Sidenav for Docs
-====================================== */
 
 .bs-docs-sidenav {
   width: 228px;
@@ -334,6 +308,7 @@ hr.soften {
      -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
           box-shadow: 0 1px 4px rgba(0,0,0,.065);
 }
+
 .bs-docs-sidenav > li > a {
   display: block;
   width: 190px \9;
@@ -342,16 +317,19 @@ hr.soften {
   border: 1px solid #e5e5e5;
   color: #777;
 }
+
 .bs-docs-sidenav > li:first-child > a {
   -webkit-border-radius: 6px 6px 0 0;
      -moz-border-radius: 6px 6px 0 0;
           border-radius: 6px 6px 0 0;
 }
+
 .bs-docs-sidenav > li:last-child > a {
   -webkit-border-radius: 0 0 6px 6px;
      -moz-border-radius: 0 0 6px 6px;
           border-radius: 0 0 6px 6px;
 }
+
 .bs-docs-sidenav > .active > a {
   position: relative;
   z-index: 2;
@@ -362,35 +340,36 @@ hr.soften {
      -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
           box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
 }
-/* Chevrons */
+
 .bs-docs-sidenav .icon-chevron-right {
   float: right;
   margin-top: 2px;
   margin-right: -6px;
   opacity: .25;
 }
+
 .bs-docs-sidenav > li > a:hover {
   background-color: #f5f5f5;
 }
+
 .bs-docs-sidenav a:hover .icon-chevron-right {
   opacity: .5;
 }
+
 .bs-docs-sidenav .active .icon-chevron-right,
 .bs-docs-sidenav .active a:hover .icon-chevron-right {
-  /*background-image: url(../img/glyphicons-halflings-white.png);*/
   opacity: 1;
 }
+
 .bs-docs-sidenav.affix {
   top: 40px;
 }
+
 .bs-docs-sidenav.affix-bottom {
   position: absolute;
   top: auto;
   bottom: 270px;
 }
-
-
-
 
 @media (min-width: 1200px) {
   .bs-docs-container {
@@ -400,20 +379,17 @@ hr.soften {
     width: 258px;
   }
   .bs-docs-sidenav > li > a {
-    width: 230px \9; /* Override the previous IE8-9 hack */
+    width: 230px \9;
   }
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
-  /* Remove any padding from the body */
   body {
     padding-top: 0;
   }
-  /* Widen masthead and social buttons to fill body padding */
   .jumbotron {
-    margin-top: -20px; /* Offset bottom margin on .navbar */
+    margin-top: -20px;
   }
-  /* Adjust sidenav width */
   .bs-docs-sidenav {
     width: 166px;
     margin-top: 20px;

@@ -1,25 +1,8 @@
 <?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html 
-*/
-
-/**
- * Hybrid_Providers_Facebook provider adapter based on OAuth2 protocol
- * 
- * Hybrid_Providers_Facebook use the Facebook PHP SDK created by Facebook
- * 
- * http://hybridauth.sourceforge.net/userguide/IDProvider_info_Facebook.html
- */
 class Hybrid_Providers_Facebook extends Hybrid_Provider_Model
 {
-	// default permissions, and alot of them. You can change them from the configuration by setting the scope to what you want/need
 	public $scope = "email, user_about_me, user_birthday, user_hometown, user_website, read_stream, offline_access, publish_stream, read_friendlists";
 
-	/**
-	* IDp wrappers initializer 
-	*/
 	function initialize() 
 	{
 		if ( ! $this->config["keys"]["id"] || ! $this->config["keys"]["secret"] ){
@@ -53,11 +36,6 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model
 		$this->api->getUser();
 	}
 
-	/**
-	* begin login step
-	* 
-	* simply call Facebook::require_login(). 
-	*/
 	function loginBegin()
 	{
 		$parameters = array("scope" => $this->scope, "redirect_uri" => $this->endpoint, "display" => "page");
@@ -69,38 +47,26 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model
 			}
 		}
 
-		// get the login url 
 		$url = $this->api->getLoginUrl( $parameters );
 
-		// redirect to facebook
 		Hybrid_Auth::redirect( $url );
 	}
 
-	/**
-	* finish login step 
-	*/
 	function loginFinish()
 	{ 
-		// in case we get error_reason=user_denied&error=access_denied
 		if ( isset( $_REQUEST['error'] ) && $_REQUEST['error'] == "access_denied" ){ 
 			throw new Exception( "Authentication failed! The user denied your request.", 5 );
 		}
 
-		// try to get the UID of the connected user from fb, should be > 0 
 		if ( ! $this->api->getUser() ){
 			throw new Exception( "Authentication failed! {$this->providerId} returned an invalid user id.", 5 );
 		}
 
-		// set user as logged in
 		$this->setUserConnected();
 
-		// store facebook access token 
 		$this->token( "access_token", $this->api->getAccessToken() );
 	}
 
-	/**
-	* logout
-	*/
 	function logout()
 	{ 
 		$this->api->destroySession();
@@ -108,12 +74,8 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model
 		parent::logout();
 	}
 
-	/**
-	* load the user profile from the IDp api client
-	*/
 	function getUserProfile()
 	{
-		// request user profile from fb api
 		try{ 
 			$data = $this->api->api('/me'); 
 		}
@@ -121,12 +83,10 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model
 			throw new Exception( "User profile request failed! {$this->providerId} returned an error: $e", 6 );
 		} 
 
-		// if the provider identifier is not recived, we assume the auth has failed
 		if ( ! isset( $data["id"] ) ){ 
 			throw new Exception( "User profile request failed! {$this->providerId} api returned an invalid response.", 6 );
 		}
 
-		# store the user profile.
 		$this->user->profile->identifier    = (array_key_exists('id',$data))?$data['id']:"";
 		$this->user->profile->displayName   = (array_key_exists('name',$data))?$data['name']:"";
 		$this->user->profile->firstName     = (array_key_exists('first_name',$data))?$data['first_name']:"";
@@ -151,9 +111,6 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model
 		return $this->user->profile;
  	}
 
-	/**
-	* load the user contacts
-	*/
 	function getUserContacts()
 	{
 		try{ 
@@ -183,9 +140,6 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model
 		return $contacts;
  	}
 
-	/**
-	* update user status
-	*/
 	function setUserStatus( $status )
 	{
 		$parameters = array();
@@ -205,11 +159,6 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model
 		}
  	}
 
-	/**
-	* load the user latest activity  
-	*    - timeline : all the stream
-	*    - me       : the user activity only  
-	*/
 	function getUserActivity( $stream )
 	{
 		try{

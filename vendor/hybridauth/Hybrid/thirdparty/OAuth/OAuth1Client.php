@@ -1,11 +1,4 @@
-<?php
-/*!
-* HybridAuth
-* http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
-* (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html 
-*/
-
-// A service client for the OAuth 1/1.0a flow.
+<?phpce client for the OAuth 1/1.0a flow.
 // v0.1
 class OAuth1Client{
 	public $api_base_url          = "";
@@ -27,14 +20,9 @@ class OAuth1Client{
 	public $curl_useragent        = "OAuth/1 Simple PHP Client v0.1; HybridAuth http://hybridauth.sourceforge.net/";
 	public $curl_proxy            = null;
 
-	//--
-
 	public $http_code             = "";
 	public $http_info             = "";
 
-	/** 
-	* OAuth client constructor
-	*/ 
 	function __construct( $consumer_key, $consumer_secret, $oauth_token = null, $oauth_token_secret = null )
 	{
 		$this->sha1_method = new OAuthSignatureMethod_HMAC_SHA1();
@@ -46,11 +34,6 @@ class OAuth1Client{
 		} 
 	}
 
-	/** 
-	* Build authorize url
-	* 
-	* @return string 
-	*/ 
 	function authorizeUrl( $token, $extras =array() )
 	{
 		if ( is_array( $token ) ){
@@ -66,11 +49,6 @@ class OAuth1Client{
 		return $this->authorize_url . "?" . http_build_query( $parameters );
     }
 
-	/**
-	* Get a request_token from provider
-	* 
-	* @return array a key/value array containing oauth_token and oauth_token_secret 
-	*/
 	function requestToken( $callback = null )
 	{
 		$parameters = array(); 
@@ -86,16 +64,10 @@ class OAuth1Client{
 		return $token; 
 	} 
 
-	/** 
-	* Exchange the request token and secret for an access token and secret, to sign API calls. 
-	* 
-	* @return array array('oauth_token' => the access token, 'oauth_token_secret' => the access secret) 
-	*/
 	function accessToken( $oauth_verifier = false, $oauth_token = false )
 	{
 		$parameters = array();
 
-		// 1.0a
 		if ( $oauth_verifier ) {
 			$parameters['oauth_verifier'] = $oauth_verifier; 
 		}
@@ -107,25 +79,16 @@ class OAuth1Client{
 		return $token;
 	}
 
-	/** 
-	* GET wrappwer for provider apis request
-	*/
 	function get($url, $parameters = array())
 	{
 		return $this->api($url, 'GET', $parameters); 
 	} 
 
-	/** 
-	* POST wreapper for provider apis request
-	*/
 	function post($url, $parameters = array())
 	{
 		return $this->api($url, 'POST', $parameters); 
 	}
 
-	/** 
-	* Format and sign an oauth for provider api 
-	*/ 
 	function api( $url, $method = 'GET', $parameters = array() )
 	{
 		if ( strrpos($url, 'http://') !== 0 && strrpos($url, 'https://') !== 0 ) {
@@ -141,9 +104,6 @@ class OAuth1Client{
 		return $response; 
 	} 
 
-	/** 
-	* Make signed request  
-	*/ 
 	function signedRequest( $url, $method, $parameters )
 	{
 		$request = OAuthRequest::from_consumer_and_token($this->consumer, $this->token, $method, $url, $parameters);
@@ -154,9 +114,6 @@ class OAuth1Client{
 		}
 	}
 	
-	/** 
-	* Make http request  
-	*/ 
 	function request( $url, $method, $postfields = NULL, $auth_header = null )
 	{
 		Hybrid_Logger::info( "Enter OAuth1Client::request( $method, $url )" );
@@ -165,7 +122,6 @@ class OAuth1Client{
 		$this->http_info = array();
 		$ci = curl_init();
 
-		/* Curl settings */
 		curl_setopt( $ci, CURLOPT_USERAGENT     , $this->curl_useragent );
 		curl_setopt( $ci, CURLOPT_CONNECTTIMEOUT, $this->curl_connect_time_out );
 		curl_setopt( $ci, CURLOPT_TIMEOUT       , $this->curl_time_out );
@@ -212,9 +168,6 @@ class OAuth1Client{
 		return $response; 
 	}
 
-	/**
-	* Get the header info to store.
-	*/
 	function getHeader($ch, $header) {
 		$i = strpos($header, ':');
 
